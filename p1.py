@@ -6,8 +6,8 @@ import random
 pg.init()
 
 # Screen settings
-screen_width = 800
-screen_height = 600
+screen_width = 1280     
+screen_height = 800
 screen = pg.display.set_mode((screen_width, screen_height))
 pg.display.set_caption("Test Program")
 
@@ -48,6 +48,23 @@ while running:
         green = random.randint(0, 255)
         blue = random.randint(0, 255)
         circle_speed_y = -circle_speed_y  # Reverse direction
+
+    #Changes the color of the circle when the mouse is clicked over it
+    if pg.mouse.get_pressed()[0]:
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        distance = ((circle_x - mouse_x) ** 2 + (circle_y - mouse_y) ** 2) ** 0.5
+        if distance < circle_radius:
+            red = random.randint(0, 255)
+            green = random.randint(0, 255)
+            blue = random.randint(0, 255)
+    
+    #Changes the direction of the circle when the mouse is clicked over it
+    if pg.mouse.get_pressed()[2]:
+        mouse_x, mouse_y = pg.mouse.get_pos()
+        distance = ((circle_x - mouse_x) ** 2 + (circle_y - mouse_y) ** 2) ** 0.5
+        if distance < circle_radius:
+            circle_speed_x = random.uniform(-1, 1)
+            circle_speed_y = random.uniform(-1, 1)
 
     # Fill the screen with gray color
     screen.fill(gray)
