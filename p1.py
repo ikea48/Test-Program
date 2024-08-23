@@ -1,6 +1,7 @@
 import pygame as pg
 import sys
 import random
+import time
 
 # Initialize Pygame
 pg.init()
@@ -23,6 +24,8 @@ circle_y = screen_height // 2
 circle_radius = 100
 circle_speed_x = 0.5
 circle_speed_y = 0.5
+last_time = time.time()
+points = 0
 
 # Game loop
 running = True
@@ -32,6 +35,9 @@ while running:
         if event.type == pg.QUIT:
             running = False
 
+    # Time
+    current_time = time.time()
+    
     # Update circle position
     circle_x += circle_speed_x
     circle_y += circle_speed_y
@@ -48,15 +54,26 @@ while running:
         green = random.randint(0, 255)
         blue = random.randint(0, 255)
         circle_speed_y = -circle_speed_y  # Reverse direction
+        
+    if circle_x - circle_radius < 0 and circle_y - circle_radius < 0:
+        red = random.randint(0, 255)
+        green = random.randint(0, 255)
+        blue = random.randint(0, 255)
+        circle_speed_x = -circle_speed_x
+        circle_speed_y = -circle_speed_y
+        points += 1
 
+    #Mouse Annoyances
     #Changes the color of the circle when the mouse is clicked over it
     if pg.mouse.get_pressed()[0]:
-        mouse_x, mouse_y = pg.mouse.get_pos()
-        distance = ((circle_x - mouse_x) ** 2 + (circle_y - mouse_y) ** 2) ** 0.5
-        if distance < circle_radius:
-            red = random.randint(0, 255)
-            green = random.randint(0, 255)
-            blue = random.randint(0, 255)
+        if current_time - last_time > 0.2:
+            last_time = current_time
+            mouse_x, mouse_y = pg.mouse.get_pos()
+            distance = ((circle_x - mouse_x) ** 2 + (circle_y - mouse_y) ** 2) ** 0.5
+            if distance < circle_radius:
+                red = random.randint(0, 255)
+                green = random.randint(0, 255)
+                blue = random.randint(0, 255)
     
     # Changes the direction of the square when the mouse is clicked over it
     if pg.mouse.get_pressed()[0]:
@@ -71,6 +88,9 @@ while running:
 
     # Draw the circle
     pg.draw.rect(screen, (red, green, blue), (circle_x - circle_radius, circle_y - circle_radius, circle_radius * 2, circle_radius * 2))
+    
+    # Print the points in terminal
+    print("Points: ", points)
     
     # Update the display
     pg.display.flip()
