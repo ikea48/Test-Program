@@ -58,20 +58,20 @@ while running:
             green = random.randint(0, 255)
             blue = random.randint(0, 255)
     
-    #Changes the direction of the circle when the mouse is clicked over it
-    if pg.mouse.get_pressed()[2]:
+    # Changes the direction of the square when the mouse is clicked over it
+    if pg.mouse.get_pressed()[0]:
         mouse_x, mouse_y = pg.mouse.get_pos()
-        distance = ((circle_x - mouse_x) ** 2 + (circle_y - mouse_y) ** 2) ** 0.5
-        if distance < circle_radius:
-            circle_speed_x = random.uniform(-1, 1)
-            circle_speed_y = random.uniform(-1, 1)
+        if (circle_x - circle_radius < mouse_x < circle_x + circle_radius and
+            circle_y - circle_radius < mouse_y < circle_y + circle_radius):
+            circle_speed_x = -circle_speed_x
+            circle_speed_y = -circle_speed_y
 
     # Fill the screen with gray color
     screen.fill(gray)
 
     # Draw the circle
-    pg.draw.circle(screen, (red, green, blue), (circle_x, circle_y), circle_radius)
-
+    pg.draw.rect(screen, (red, green, blue), (circle_x - circle_radius, circle_y - circle_radius, circle_radius * 2, circle_radius * 2))
+    
     # Update the display
     pg.display.flip()
 
