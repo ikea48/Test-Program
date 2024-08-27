@@ -3,8 +3,10 @@ import sys
 import random
 import time
 
+
 # Initialize Pygame
 pg.init()
+pg.font.init()
 
 # Screen settings
 screen_width = 1280     
@@ -26,6 +28,9 @@ square_speed_x = 0.5
 square_speed_y = 0.5
 last_time = time.time()
 
+# Points
+points = 0
+
 # Game loop
 running = True
 while running:
@@ -33,9 +38,6 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
-            
-    # Points
-    points = 0        
 
     # Time
     current_time = time.time()
@@ -50,21 +52,13 @@ while running:
         green = random.randint(0, 255)
         blue = random.randint(0, 255)
         square_speed_x = -square_speed_x  # Reverse direction
-
+    
     if square_y - square_size < 0 or square_y + square_size > screen_height:
         red = random.randint(0, 255)
         green = random.randint(0, 255)
         blue = random.randint(0, 255)
         square_speed_y = -square_speed_y  # Reverse direction
-        
-    # Check if square is close to the corner of the screen
-    if (square_x - square_size <= 20 and square_y - square_size <= 20) or \
-    (square_x + square_size >= screen_width - 20 and square_y - square_size <= 20) or \
-    (square_x - square_size <= 20 and square_y + square_size >= screen_height - 20) or \
-    (square_x + square_size >= screen_width - 20 and square_y + square_size >= screen_height - 20):
-        points += 1
-        print("Corner Hit!")
-
+   
     # Mouse Annoyances
     # Changes the color of the square when the mouse is clicked over it
     if pg.mouse.get_pressed()[0]:
@@ -76,6 +70,8 @@ while running:
                 red = random.randint(0, 255)
                 green = random.randint(0, 255)
                 blue = random.randint(0, 255)
+                points += 1
+                print("Points: ", points)
     
     # Changes the direction of the square when the mouse is clicked over it
     if pg.mouse.get_pressed()[0]:
@@ -91,12 +87,16 @@ while running:
     # Draw the square
     pg.draw.rect(screen, (red, green, blue), (square_x - square_size, square_y - square_size, square_size * 2, square_size * 2))
     
-    # Print the points in terminal
-    print("Points: ", points)
+    # Display the Points on Screen
+    font = pg.font.Font(None, 30)
+    text = font.render("Points: " + str(points), True, (0, 0, 0))
+    
     
     # Update the display
+    screen.blit(text, (100, 100))
     pg.display.flip()
 
 # Quit the game
 pg.quit()
 sys.exit()
+pg.font.quit()
