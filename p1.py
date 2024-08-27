@@ -82,8 +82,8 @@ while running:
             square_speed_y = -square_speed_y
 
     # Fill the screen with gray color
-    screen.fill(gray)
-
+    screen_color = screen.fill(gray)
+    
     # Draw the square
     pg.draw.rect(screen, (red, green, blue), (square_x - square_size, square_y - square_size, square_size * 2, square_size * 2))
     
